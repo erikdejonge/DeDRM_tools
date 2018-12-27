@@ -19,7 +19,7 @@ Just download and use these tools, that's all! Uh, almost. There are a few, uh, 
 But otherwise, if your ebook is from Amazon, Kobo, Barnes & Noble or any of the ebook stores selling ebooks compatible with Adobe Digital Editions 2.0.1, you should be able to remove the DRM that's been applied to your ebooks.
 
 ### A Recent Change to Kindle for PC/Kindle for Mac
-Starting with version 1.19, Kindle for PC/Mac uses Amazon's new KFX format which these tools can't handle. There are two options to get the older formats that the tools can decrypt. Either stick with version 1.17 or earlier, or modify the executable by changing a file name.
+Starting with version 1.19, Kindle for PC/Mac uses Amazon's new KFX format which isn't quite as good a source fro conversion to ePub as the older KF8 (& MOBI) formats. There are two options to get the older formats. Either stick with version 1.17 or earlier, or modify the executable by changing a file name.
 
 Version 1.17 of Kindle is are no longer available directly from Amazon, so you will need to search for the proper file name and find it on a third party site. The name is "KindleForPC-installer-1.17.44170.exe" for PC and "KindleForMac-44182.dmg" for Mac.
 Verify the one of the following cryptographic hash values, using software of your choice, before installing the downloaded file in order to avoid viruses. If the hash does not match, delete the downloaded file and try again from another site.
@@ -34,7 +34,7 @@ SHA-256: 28DC21246A9C7CDEDD2D6F0F4082E6BF7EF9DB9CE9D485548E 8A9E1D19EAE2AC.
 
 You will need to go to the preferences and uncheck the auto update checkbox. Then download and install 1.17 over the top of the 1.19 installation. You'll also need to delete the KFX folders from your My Kindle Content folder.
 
-A second possible solution is to use 1.19 or later, but disable KFX by renaming or disabling a necessary component of the application. This may or may not work on versions after 1.20. In a command window, enter the following commands when Kindle for PC/Mac is not running:
+A other possible solution is to use 1.19 or later, but disable KFX by renaming or disabling a necessary component of the application. This may or may not work on versions after 1.20. In a command window, enter the following commands when Kindle for PC/Mac is not running:
 
 #### Windows
 ren %localappdata%\Amazon\Kindle\application\renderer-test.exe renderer-test.xxx
@@ -48,11 +48,11 @@ Mac Note: If the chmod command fails with a permission error try again using sud
 
 After restarting the Kindle program any books previously downloaded in KFX format will no longer open. You will need to remove them from your device and re-download them. All future downloads will use the older Kindle formats instead of KFX although they will continue to be placed in one individual subdirectory per book.
 
-#### Another Note on KFX
-It now possible, but not easy, to convert books from KFX to other formats in calibre by installing the optional KFX Input plugin. The lack of automatic DRM removal makes this process difficult so it is not recommended unless there is no other alternative, such as for Indic language books only available in KFX. There is a windows-only KFX DRM rmeoval program in the repository, but not yet integrated into the tools.
+#### Decrypting KFX
+Thanks to work by several people, the tools can now decrypt KFX format ebooks from Kindle for PC. In addition to the DeDRM plugin, calibre users will also need to install jhowell's KFX Input plugin which is available through the standard plugin menu in calibre, or directly from [his plugin thread](https://www.mobileread.com/forums/showthread.php?t=291290) on Mobileread.
 
 #### Thanks
-Thanks to jhowell for his investigations into KFX format and workarounds. Some of these instructions are from [his thread on the subject](https://www.mobileread.com/forums/showthread.php?t=283371) at MobileRead.
+Thanks to jhowell for his investigations into KFX format and the KFX Input plugin. Some of these instructions are from [his thread on the subject](https://www.mobileread.com/forums/showthread.php?t=283371) at MobileRead.
 
 ## Where can I get the latest version of these free DRM removal tools?
 Right here at github. Just go to the [releases page](https://github.com/apprenticeharper/DeDRM_tools/releases) and download the latest zip archive of the tools, named DeDRM\_tools\_X.X.X.zip, where X.X.X is the version number. You do not need to download the source code archive.
@@ -86,8 +86,13 @@ Try right-clicking and select open. That might give you the option to open it an
 ### I can't open the Macintosh Application at all. I get 'The aplication "DeDRM" can't be opened'
 Some unzip applications do not respect the execution bit setting. Try unzipping the main tools archive using the built-in Mac unzip utility.
 
+Alternatively, sometimes the execution bit isn't set correctly in the archive. If you put the extracted DeDRM application in your Applications folder, you can set the executable bit on the 'droplet' file from the terminal using the command chmod +x /Applications/DeDRM.app/Contents/MacOS/droplet
+
 ### I can't open the Macintosh Application at all. I get 'spawn_via_launchd() failed, errno=111'
 There seems to be a bug in Apple's launch services. Try using the free [Maintenance utility](https://www.titanium-software.fr/en/maintenance.html) from Titanium Software to clear the launch cache and database.
+
+### The application opens, but always gives an error in the log 'ImportError: No module named Crypto.Cipher'
+Some version of MacOS don't include PyCrpto. Your should be able to install it by using this command in the Terminal app: python -m pip pycrypto
 
 # Using the Tools
 ## I can’t get the tools to work on my rented or library ebooks.
@@ -149,7 +154,7 @@ There are several possible reasons why only some books get their DRM removed.
 If you are still having problems with particular books, you will need to create a log of the DRM removal attempt for one of the problem books, and post that in a comment at Apprentice Alf's blog or in a new issue at Apprentice Harper's github repository.
 
 ## My Kindle book has imported and the DRM has been removed, but all the pictures are gone.
-Most likely, this is a book downloaded from Amazon directly to an eInk Kindle (e.g. Paperwhite). Unfortunately, the pictures are probably in a .azw6 file that the tools don't understand. You must download the book manually from Amazon's web site "For transfer via USB" to your Kindle. When you download the eboook in this manner, Amazon will package the pictures in the with text in a single file that the tools will be able to import successfully.
+Most likely, this is a book downloaded from Amazon directly to an eInk Kindle (e.g. Paperwhite). Unfortunately, the pictures are probably in a .azw6 file that the tools don't understand. You must download the book manually from Amazon's web site "For transfer via USB" to your Kindle. When you download the eBook in this manner, Amazon will package the pictures in the with text in a single file that the tools will be able to import successfully.
 
 ## My Kindle book has imported, but it's showing up as an AZW4 format. Conversions take a long time and/or are very poor.
 You have found a Print Replica Kindle ebook. This is a PDF in a Kindle wrapper. Now the DRM has been removed, you can extract the PDF from the wrapper using the KindleUnpack plugin. Conversion of PDFs rarely gives good results.
@@ -221,7 +226,7 @@ The authors tend to identify themselves only by pseudonyms:
 * The Amazon Topaz format conversion was created by some_updates, clarknova, and Bart Simpson
 * The DeDRM all-in-one AppleScript application was created by Apprentice Alf
 * The DeDRM all-in-one Python application was created by some_updates
-* The DeDRM all-in-one calibre plugins was created by Apprentice Alf
+* The DeDRM all-in-one calibre plugin was created by Apprentice Alf
 * The Scuolabooks tool was created by Hex
 * The Microsoft code was created by drs
 * The Apple DRM removal tool was created by Brahms
